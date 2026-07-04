@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Resume Parser & Talent Analytics</title>
+    <!-- Google Fonts: Inter and Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Premium Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-fontawesome/6.4.0/css/all.min.css">
+    <!-- Custom Style Sheet -->
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="brand">
+                <i class="fa-solid fa-brain-circuit logo-icon"></i>
+                <span class="brand-name">TalentAI</span>
+            </div>
+            
+            <nav class="nav-menu">
+                <a href="#" class="nav-item active" id="nav-dashboard">
+                    <i class="fa-solid fa-chart-pie"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="nav-item" id="nav-resumes">
+                    <i class="fa-solid fa-file-invoice"></i>
+                    <span>Resumes</span>
+                </a>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <div class="user-avatar"><i class="fa-solid fa-user-tie"></i></div>
+                    <div class="user-info">
+                        <span class="user-name">HR Manager</span>
+                        <span class="user-role">Recruitment</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-title-container">
+                    <h1 class="header-title">Resume Analytics Hub</h1>
+                    <p class="header-subtitle">Extract, categorize, and search candidate profiles with AI-driven intelligence</p>
+                </div>
+                <div class="theme-toggle">
+                    <i class="fa-solid fa-moon"></i>
+                </div>
+            </header>
+
+            <!-- Dashboard View -->
+            <section class="view-section" id="dashboard-view">
+                <!-- Stats Overview -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon purple-glow"><i class="fa-solid fa-users"></i></div>
+                        <div class="stat-data">
+                            <span class="stat-value" id="stat-total-candidates">0</span>
+                            <span class="stat-label">Total Resumes</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon emerald-glow"><i class="fa-solid fa-award"></i></div>
+                        <div class="stat-data">
+                            <span class="stat-value" id="stat-avg-skills">0</span>
+                            <span class="stat-label">Avg. Skills / Candidate</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon blue-glow"><i class="fa-solid fa-tags"></i></div>
+                        <div class="stat-data">
+                            <span class="stat-value" id="stat-unique-skills">0</span>
+                            <span class="stat-label">Total Unique Skills</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Split Upload & Quick Analytics -->
+                <div class="grid-split">
+                    <!-- Upload Card -->
+                    <div class="panel-card glass-panel upload-panel">
+                        <h2 class="panel-title"><i class="fa-solid fa-cloud-arrow-up"></i> Upload Resumes</h2>
+                        <p class="panel-desc">Drag and drop resumes here, or browse files. Support for PDF, DOCX, DOC, and TXT files up to 16MB.</p>
+                        
+                        <div class="drop-zone" id="drop-zone">
+                            <input type="file" id="file-input" class="file-input" multiple accept=".pdf,.docx,.doc,.txt">
+                            <div class="drop-zone-content">
+                                <i class="fa-solid fa-file-pdf pdf-icon"></i>
+                                <span class="drop-prompt">Drag & Drop Resume files here</span>
+                                <span class="drop-or">or</span>
+                                <button type="button" class="btn btn-primary" id="browse-btn">Browse Files</button>
+                            </div>
+                        </div>
+
+                        <!-- Upload Queue Status -->
+                        <div class="upload-queue" id="upload-queue"></div>
+                    </div>
+
+                    <!-- Skills Distribution & Quick Filters -->
+                    <div class="panel-card glass-panel">
+                        <h2 class="panel-title"><i class="fa-solid fa-compass-drafting"></i> Top Extracted Skills</h2>
+                        <p class="panel-desc">Click on any skill to instantly filter candidate search results.</p>
+                        <div class="skills-cloud-container">
+                            <div class="skills-cloud" id="top-skills-cloud">
+                                <span class="no-skills-msg">Upload resumes to discover skills.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Search and List Panel -->
+            <section class="panel-card glass-panel search-list-panel">
+                <div class="search-header">
+                    <h2 class="panel-title"><i class="fa-solid fa-magnifying-glass"></i> Candidates Explorer</h2>
+                    
+                    <div class="search-controls">
+                        <!-- Text Search -->
+                        <div class="search-bar-container">
+                            <i class="fa-solid fa-search search-bar-icon"></i>
+                            <input type="text" id="search-input" placeholder="Search by name, education, or keyword...">
+                        </div>
+                        
+                        <!-- Skill-tag filter summary -->
+                        <div class="active-filters" id="active-filters">
+                            <!-- Dynamically generated filters will go here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Candidates Table/Grid -->
+                <div class="candidates-container">
+                    <div class="candidates-table-header">
+                        <div class="col-name">Candidate Name</div>
+                        <div class="col-contact">Contact Details</div>
+                        <div class="col-education">Education Summary</div>
+                        <div class="col-skills">Primary Skills</div>
+                        <div class="col-actions">Actions</div>
+                    </div>
+                    <div class="candidates-list" id="candidates-list">
+                        <!-- Skeleton loader shows on page load -->
+                        <div class="skeleton-row"></div>
+                        <div class="skeleton-row"></div>
+                        <div class="skeleton-row"></div>
+                    </div>
+                </div>
+            </section>
+        </main>
+        
+        <!-- Candidate Detail Drawer (Slide-out panel) -->
+        <div class="drawer-overlay" id="drawer-overlay"></div>
+        <div class="drawer" id="candidate-drawer">
+            <div class="drawer-header">
+                <div class="drawer-title-container">
+                    <h3 class="drawer-candidate-name" id="drawer-name">Candidate Name</h3>
+                    <span class="drawer-candidate-filename" id="drawer-filename">resume.pdf</span>
+                </div>
+                <button class="btn-close-drawer" id="close-drawer-btn"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            
+            <div class="drawer-body">
+                <div class="drawer-section">
+                    <h4 class="drawer-section-title"><i class="fa-solid fa-address-book"></i> Contact Details</h4>
+                    <div class="drawer-contact-grid">
+                        <div class="contact-item">
+                            <span class="contact-label">Email:</span>
+                            <span class="contact-value" id="drawer-email">john.doe@example.com</span>
+                        </div>
+                        <div class="contact-item">
+                            <span class="contact-label">Phone:</span>
+                            <span class="contact-value" id="drawer-phone">+1 234 567 8900</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="drawer-section">
+                    <h4 class="drawer-section-title"><i class="fa-solid fa-graduation-cap"></i> Education Details</h4>
+                    <div class="drawer-education-box" id="drawer-education">
+                        B.S. in Computer Science - State University
+                    </div>
+                </div>
+
+                <div class="drawer-section">
+                    <h4 class="drawer-section-title"><i class="fa-solid fa-brain"></i> Extracted Skills</h4>
+                    <div class="drawer-skills-list" id="drawer-skills">
+                        <!-- Dynamic skills badges -->
+                    </div>
+                </div>
+
+                <div class="drawer-section flex-grow">
+                    <h4 class="drawer-section-title"><i class="fa-solid fa-file-lines"></i> Full Extracted Text</h4>
+                    <div class="drawer-raw-text-container">
+                        <pre class="drawer-raw-text" id="drawer-raw-text">Raw extracted resume text...</pre>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="drawer-footer">
+                <button class="btn btn-secondary" id="drawer-download-btn"><i class="fa-solid fa-download"></i> Download Resume</button>
+                <button class="btn btn-danger" id="drawer-delete-btn"><i class="fa-solid fa-trash-can"></i> Delete Profile</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Custom Application JS -->
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
